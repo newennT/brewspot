@@ -3,113 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
     <title>Brew Spot</title>
 </head>
 <body>
-    <div id="app" class="app">
-        <h1>{{ restaurantName }}</h1>
-        <p class="description">
-            Bienvenue dans notre café {{ restaurantName }}! Nous sommes réputés pour
-            notre pain et nos merveilleuses pâtisseries. Faites vous plaisir dès le
-            matin ou avec un goûter réconfortant. Mais attention, vous verrez qu'il
-            est difficile de s'arrêter.
-        </p>
+    <div id="app"></div>
 
-        <section class="menu">
-            <h2>Menu</h2>
-            <div v-for="item in simpleMenu" :key="item.name">
-                <div class="menu-item">
-                    <h3>{{ item.name }}</h3>
-                    <p v-if="item.stock">En stock</p>
-                    <p v-else>Rupture de stock</p>
-                    <div>
-                        <label for="add-item-quantity">
-                            Stock : {{ item.stock }}
-                        </label>
-                        <input type="number" id="add-item-quantity" v-model="item.quantity">
-                        <button @click="addToShoppingCart(item.quantity)">Ajouter au panier</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <aside class="shopping-cart">
-            <h2>Panier : {{ shoppingCart }} articles</h2>
-        </aside>
-        
-        
-
-
-        <footer>
-            <p>{{ copyright }}</p>
-            <ul>
-                <li v-for="item in apiResponse" :key="item.id"><a :href="item.url">{{ item.name }}</a></li>
-            </ul>
-        </footer>
-
-    </div>
-
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script>
-        const { createApp } = Vue;
-        const app = createApp({
-            data() {
-                return {
-                    apiResponse: [
-                        { name: 'GitHub', url: 'https://www.github.com' },
-                        { name: 'Twitter', url: 'https://www.twitter.com' },
-                        { name: 'Netlify', url: 'https://www.netlify.com' }
-                    ],
-                    simpleMenu: [
-                        {
-                            name: "Croissant",
-                            inStock: true,
-                            quantity: 0,
-                            stock: 10,
-                            cost: 2
-                        },
-                        {
-                            name: "Baguette",
-                            inStock: false,
-                            quantity: 0,
-                            stock: 8,
-                            cost: 3
-                        },
-                        {
-                            name: "Pain au chocolat",
-                            inStock: true,
-                            quantity: 0,
-                            stock: 0,
-                            cost: 4
-                        }
-                    ],
-                    shoppingCart: 0,
-
-                    restaurantName: "Brew Spot",
-                    address: "18 avenue de l'Ecluse, 35000 Rennes",
-                    email: "contact@brewspot.com",
-                    phone: "01 23 45 67 89",
-                    username: "",
-                    password: ""
-                }
-            },
-            computed: {
-                totalCost() {
-                    return this.shoppingCart.reduce((total, item) => total + item.cost, 0);
-                },
-                copyright() {
-                    const currentYear = new Date().getFullYear();
-                    return `© ${this.restaurantName} ${currentYear}`;
-                }
-            },
-            methods: {
-                addToShoppingCart(amount) {
-                    this.shoppingCart += amount;
-                }
-            }
-        });
-        app.mount('#app');
-    </script>
+    <script type="module" src="/src/main.js"></script>
 </body>
 </html>

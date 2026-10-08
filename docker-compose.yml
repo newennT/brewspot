@@ -1,8 +1,10 @@
 services:
   frontend:
     build: .
-    container_name: brewspot-vue
+    container_name: brewspot
     ports:
-      - "8080:80"
+      - "5173:5173"
     volumes:
-      - .:/usr/share/nginx/html
+      - .:/app
+      - /app/node_modules
+    command: npm run dev -- --host 0.0.0.0
