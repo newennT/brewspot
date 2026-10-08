@@ -1,0 +1,8 @@
+services:
+  frontend:
+    build: .
+    container_name: brewspot-vue
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/usr/share/nginx/html
