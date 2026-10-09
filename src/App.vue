@@ -15,16 +15,16 @@
       <MenuItem
         v-for="item in simpleMenu"
         :key="item.name"
-        :addToShoppingCart="addToShoppingCart"
-        :inStock="item.inStock"
         :name="item.name"
         :quantity="item.quantity"
         :cost="item.cost"
+        :stock="item.stock"
+        @add-to-cart="addToShoppingCart"
       />
     </section>
 
     <aside class="shopping-cart">
-      <h2>Panier : {{ shoppingCart }} articles</h2>
+      <h2>Panier : {{ shoppingCartCount }} articles - {{ shoppingCartTotal.toFixed(2) }}€</h2>
     </aside>
 
     <footer>
@@ -69,28 +69,25 @@ export default {
       simpleMenu: [
         {
           name: 'Croissant',
-          inStock: true,
           stock: 10,
-          quantity: 1,
-          cost: 2
+          quantity: 0,
+          cost: 3
         },
         {
           name: 'Baguette',
-          inStock: false,
           stock: 10,
-          quantity: 1,
+          quantity: 0,
           cost: 3
         },
         {
           name: 'Pain au chocolat',
-          inStock: true,
           stock: 5,
           quantity: 0,
           cost: 4
         }
       ],
 
-      shoppingCart: 0,
+      shoppingCart: [],
 
       restaurantName: 'Brew Spot',
       address: "18 avenue de l'Ecluse, 35000 Rennes",
@@ -104,15 +101,49 @@ export default {
   computed: {
     copyright() {
       const currentYear = new Date().getFullYear()
-
       return `© ${this.restaurantName} ${currentYear}`
+    },
+     shoppingCartCount() {
+      return this.shoppingCart.reduce(
+        (total, item) => total + item.quantity,
+        0
+      )
+    },
+
+    shoppingCartTotal() {
+      return this.shoppingCart.reduce(
+        (total, item) => total + item.quantity * item.cost,
+        0
+      )
     }
   },
 
   methods: {
-    addToShoppingCart(amount) {
-      this.shoppingCart += amount
-    }
+    addToShoppingCart({ name, quantity }) {
+      const item = this.simpleMenu.find(
+        product => product.name === name
+      )
+
+      if(!item || !Number.isInteger(quantity) || quantity <= 0 || quantity > item.stock) return
+
+      item.stock -= quantity
+      
+      const cartItem = this.shoppingCart.find(
+        product => product.name === name
+      )
+
+      if (cartItem) {
+        cartItem.quantity += quantity
+      } else {
+        this.shoppingCart.push({
+          name: item.name,
+          quantity: quantity,
+          cost: item.cost
+        })
+      }
+    },
+
+   
   }
 }
 </script>
