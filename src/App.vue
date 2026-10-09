@@ -12,32 +12,15 @@
     <section class="menu">
       <h2>Menu</h2>
 
-      <div v-for="item in simpleMenu" :key="item.name">
-        <div class="menu-item">
-          <h3>{{ item.name }}</h3>
-
-          <p v-if="item.inStock">En stock</p>
-          <p v-else>Rupture de stock</p>
-
-          <div>
-            <label :for="`quantity-${item.name}`">
-              Quantité : {{ item.quantity }}
-            </label>
-
-            <input
-              :id="`quantity-${item.name}`"
-              type="number"
-              v-model.number="item.quantity"
-              min="0"
-              :max="item.stock"
-            >
-
-            <button @click="addToShoppingCart(item.quantity)">
-              Ajouter au panier
-            </button>
-          </div>
-        </div>
-      </div>
+      <MenuItem
+        v-for="item in simpleMenu"
+        :key="item.name"
+        :addToShoppingCart="addToShoppingCart"
+        :inStock="item.inStock"
+        :name="item.name"
+        :quantity="item.quantity"
+        :cost="item.cost"
+      />
     </section>
 
     <aside class="shopping-cart">
@@ -57,7 +40,12 @@
 </template>
 
 <script>
+import MenuItem from './components/MenuItem.vue'
+
 export default {
+  components: {
+    MenuItem
+  },
   data() {
     return {
       apiResponse: [
@@ -83,14 +71,14 @@ export default {
           name: 'Croissant',
           inStock: true,
           stock: 10,
-          quantity: 0,
+          quantity: 1,
           cost: 2
         },
         {
           name: 'Baguette',
           inStock: false,
-          stock: 0,
-          quantity: 0,
+          stock: 10,
+          quantity: 1,
           cost: 3
         },
         {
